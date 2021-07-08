@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 
 import './questions.dart';
+import './answer.dart';
 
 void main() => runApp(MyApp());
 
@@ -17,16 +18,31 @@ class _MyAppState extends State<MyApp> {
 
   int _titleIndex = 0;
 
-  void printClick() {
-    // setState(() => {_titleIndex += 1});
-    print('onButton clicked');
-  }
-
   List<String> titles = [
-    'Title 1',
+    'Question 1 HDjhkdsfkhjfs?',
     'Title 2',
     'Title 3',
   ];
+
+  var questions = [
+    {
+      'questionText': 'What is your favourite color?',
+      'answers': ['red', 'green', 'grey', 'blue']
+    },
+    {
+      'questionText': 'Who is better?',
+      'answers': ['Cat', 'Dog']
+    },
+    {
+      'questionText': 'What is your favourite outfit?',
+      'answers': ['trousers', 'tie', 'pants', 't-shirt']
+    },
+  ];
+
+  void _updateState() {
+    setState(() => {_titleIndex += 1});
+    print(_titleIndex);
+  }
 
   Widget build(BuildContext context) {
     return MaterialApp(
@@ -39,14 +55,13 @@ class _MyAppState extends State<MyApp> {
         body: Center(
           child: Column(
             children: [
-              Questions(titles[_titleIndex]),
-              ElevatedButton(
-                  onPressed: printClick, child: Text('ElevatedButton')),
-              ElevatedButton(
-                  onPressed: printClick, child: Text('ElevatedButton'))
+              Questions(questions[_titleIndex]['questionText']),
+              ...(questions[_titleIndex]['answers'] as List<String>)
+                  .map((value) => Answer(_updateState, value))
+                  .toList()
             ],
           ),
-        ), // builds body
+        ),
       ),
     );
   }
