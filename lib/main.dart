@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_my_app/quiz.dart';
 
-import './questions.dart';
-import './answer.dart';
+import './result.dart';
 
 void main() => runApp(MyApp());
 
@@ -16,15 +16,7 @@ class MyApp extends StatefulWidget {
 class _MyAppState extends State<MyApp> {
   @override // decorator provided by Flutter (for code style and we overriding it with our implementation)
 
-  int _titleIndex = 0;
-
-  List<String> titles = [
-    'Question 1 HDjhkdsfkhjfs?',
-    'Title 2',
-    'Title 3',
-  ];
-
-  var questions = [
+  final questions = const [
     {
       'questionText': 'What is your favourite color?',
       'answers': ['red', 'green', 'grey', 'blue']
@@ -39,8 +31,20 @@ class _MyAppState extends State<MyApp> {
     },
   ];
 
+  int _titleIndex = 0;
+
+  List<String> titles = [
+    'Question 1 HDjhkdsfkhjfs?',
+    'Title 2',
+    'Title 3',
+  ];
+
   void _updateState() {
     setState(() => {_titleIndex += 1});
+
+    if (_titleIndex < questions.length) {
+      print('here we are');
+    }
     print(_titleIndex);
   }
 
@@ -53,14 +57,13 @@ class _MyAppState extends State<MyApp> {
           title: Text("My First App"),
         ), // builds appBar
         body: Center(
-          child: Column(
-            children: [
-              Questions(questions[_titleIndex]['questionText']),
-              ...(questions[_titleIndex]['answers'] as List<String>)
-                  .map((value) => Answer(_updateState, value))
-                  .toList()
-            ],
-          ),
+          child: _titleIndex < questions.length
+              ? Quiz(
+                  answerQuestion: _updateState,
+                  questionIndex: _titleIndex,
+                  questions: questions,
+                )
+              : Result(),
         ),
       ),
     );
